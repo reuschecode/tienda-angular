@@ -1,0 +1,98 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <div class="modal-title h4" id="example-modal-sizes-title-lg">
+            <ng-container *ngIf="producto">
+                <ng-container *ngIf="producto.idProducto">Editar</ng-container>
+                <ng-container *ngIf="!producto.idProducto">Crear</ng-container>
+                Producto
+                <ng-container *ngIf="producto.idProducto">'{{ producto.nombre }}'</ng-container>
+            </ng-container>
+        </div>
+    </div>
+    <div class="overlay overlay-block cursor-default modal-body" style="min-height: 404px">
+        <ng-container *ngIf="isLoading$ | async">
+            <div class="overlay-layer bg-transparent">
+                <div class="spinner spinner-lg spinner-success"></div>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="producto">
+            <form action="#" class="form form-label-right" [formGroup]="formGroup">
+                <div class="form-group row">
+                    <div class="col-lg-6">
+                        <label class="form-label">Ingresa Nombre</label>
+                        <input type="text" class="form-control form-control-lg form-control-solid" name="nombre" placeholder="Nombre" autocomplete="off" [class.is-invalid]="isControlInvalid('nombre')" [class.is-valid]="isControlValid('nombre')" formControlName="nombre" />
+                        <div class="valid-feedback" *ngIf="isControlValid('nombre')">
+                            Nombre válido
+                        </div>
+                        <div class="invalid-feedback" *ngIf="controlHasError('required', 'nombre')">
+                            El nombre es obligatorio
+                        </div>
+                        <div class="invalid-feedback" *ngIf="controlHasError('minlength', 'nombre')">
+                            El nombre tiene como mínimo 3 letras
+                        </div>
+                        <div class="invalid-feedback" *ngIf="controlHasError('maxlength', 'nombre')">
+                            El nombre tiene como máximo 100 letras
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <label class="form-label">Ingrese Precio</label>
+                        <input type="number" class="form-control form-control-lg form-control-solid is-invalid" step="0.01" name="precio" placeholder="Precio" autocomplete="off" [class.is-invalid]="isControlInvalid('precio')" [class.is-valid]="isControlValid('precio')" formControlName="precio"
+                        />
+                        <div class="valid-feedback" *ngIf="isControlValid('precio')">
+                            Precio válido
+                        </div>
+                        <div class="invalid-feedback" *ngIf="controlHasError('required', 'precio')">
+                            El precio es obligatorio
+                        </div>
+                        <div class="invalid-feedback" *ngIf="controlHasError('min', 'precio')">
+                            El precio tiene que ser cómo mínimo 0.01
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-lg-4">
+                        <label>Selecciona Tipo</label>
+                        <select class="form-control form-control-lg form-control-solid" formControlName="tipoProducto" (ngModelChange)="selectTipo($event)">
+                            <option value="0">Ninguno</option>
+                            <option *ngFor="let tipo of tiposInput" [ngValue]="tipo.idTipoProducto">{{tipo.nombre}}</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-4">
+                        <label>Selecciona Subtipo</label>
+                        <select class="form-control form-control-lg form-control-solid" formControlName="subtipoProducto">
+                            <option value="0">Ninguno</option>
+                            <option *ngFor="let subtipo of subtipos" [ngValue]="subtipo.idSubtipoProducto">{{subtipo.nombre}}</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-4">
+                        <label>Selecciona Marca</label>
+                        <select class="form-control form-control-lg form-control-solid" formControlName="marcaProducto">
+                            <option value="0">Ninguno</option>
+                            <option *ngFor="let marca of marcasInput" [ngValue]="marca.idMarcaProducto">{{marca.nombre}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-lg-8">
+                        <img [src]="imageUrl" style="height: 200px; width: auto;">
+                    </div>
+                    <div class="col-lg-4">
+                        <label>Sube una imagen</label>
+                        <input type="file" class="form-control form-control-lg form-control-solid" accept="image/*" (change)="handleFileInput($event.target.files)" />
+                    </div>
+                </div>
+            </form>
+        </ng-container>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light btn-elevate mr-2" (click)="modal.dismiss()">
+        Cancelar
+      </button>
+        <ng-container *ngIf="producto">
+            <button type="submit" class="btn btn-primary btn-elevate" (click)="save()" [disabled]="formGroup.invalid">
+          Guardar
+        </button>
+        </ng-container>
+    </div>
+</div>

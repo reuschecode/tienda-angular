@@ -1,0 +1,83 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <div class="modal-title h4" id="example-modal-sizes-title-lg">
+            Crear Marca
+        </div>
+    </div>
+    <div class="overlay overlay-block cursor-default modal-body" style="min-height: 404px">
+        <ng-container *ngIf="isLoading$ | async">
+            <div class="overlay-layer bg-transparent">
+                <div class="spinner spinner-lg spinner-success"></div>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="marcaProducto">
+            <div class="card card-custom">
+                <form action="#" class="form form-label-right" [formGroup]="formGroup">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h3 class="card-label">Crear Marca de Producto</h3>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-lg-6">
+                                <label class="form-label">Ingresa Nombre</label>
+                                <input type="text" class="form-control form-control-lg form-control-solid" name="nombre" placeholder="Nombre Marca" autocomplete="off" [class.is-invalid]="isControlInvalid('nombre')" [class.is-valid]="isControlValid('nombre')" formControlName="nombre"
+                                />
+                                <div class="valid-feedback" *ngIf="isControlValid('nombre')">
+                                    Nombre válido
+                                </div>
+                                <div class="invalid-feedback" *ngIf="controlHasError('required', 'nombre')">
+                                    El nombre es obligatorio
+                                </div>
+                                <div class="invalid-feedback" *ngIf="controlHasError('minlength', 'nombre')">
+                                    El nombre tiene como mínimo 3 letras
+                                </div>
+                                <div class="invalid-feedback" *ngIf="controlHasError('maxlength', 'nombre')">
+                                    El nombre tiene como máximo 100 letras
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 float-right">
+                            <ng-container *ngIf="marcaProducto">
+                                <button type="submit" class="btn btn-primary btn-elevate" (click)="saveMarca()" [disabled]="formGroup.invalid">
+                              Guardar
+                            </button>
+                            </ng-container>
+                        </div>
+                    </div>
+                </form>
+                <div class="container">
+                    <div class="table-responsive angular-bootstrap-table">
+                        <h4>Editar Tipos: </h4>
+                        <table class="table table-head-custom table-vertical-center overflow-hidden">
+                            <thead>
+                                <th>ID</th>
+                                <th>NOMBRE</th>
+                                <th>ACCIONES</th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let marca of marcasInput">
+                                    <td>{{marca.idMarcaProducto}}</td>
+                                    <td>{{marca.nombre}}</td>
+                                    <td>
+
+                                        <a title="Editar Marca" class="btn btn-icon btn-light btn-hover-primary btn-sm mx-3" (click)="editMarca(marca)" *ngIf="marca.idMarcaProducto > 0">
+                                            <span [inlineSVG]="'./assets/media/svg/icons/Communication/Write.svg'" cacheSVG="true" class="svg-icon svg-icon-md svg-icon-primary">
+                              </span>
+                                        </a>
+                                    </td>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light btn-elevate mr-2" (click)="modal.dismiss()">
+        Cancelar
+      </button>
+    </div>
+</div>

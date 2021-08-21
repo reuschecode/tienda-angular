@@ -1,0 +1,163 @@
+<div class="modal-content">
+    <div class="modal-header">
+        <div class="modal-title h4" id="example-modal-sizes-title-lg">
+            Crear Tipo/Subtipo
+        </div>
+    </div>
+    <div class="overlay overlay-block cursor-default modal-body" style="min-height: 404px">
+        <ng-container *ngIf="isLoading$ | async">
+            <div class="overlay-layer bg-transparent">
+                <div class="spinner spinner-lg spinner-success"></div>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="tipoProducto">
+            <div class="card card-custom">
+                <form action="#" class="form form-label-right" [formGroup]="formGroupTipo">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h3 class="card-label">Crear Tipo de Producto</h3>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-lg-6">
+                                <label class="form-label">Ingresa Nombre</label>
+                                <input type="text" class="form-control form-control-lg form-control-solid" name="nombreTipo" placeholder="Nombre Tipo" autocomplete="off" [class.is-invalid]="isControlInvalidTipo('nombreTipo')" [class.is-valid]="isControlValidTipo('nombreTipo')" formControlName="nombreTipo"
+                                />
+                                <div class="valid-feedback" *ngIf="isControlValidTipo('nombreTipo')">
+                                    Nombre válido
+                                </div>
+                                <div class="invalid-feedback" *ngIf="controlHasErrorTipo('required', 'nombreTipo')">
+                                    El nombre es obligatorio
+                                </div>
+                                <div class="invalid-feedback" *ngIf="controlHasErrorTipo('minlength', 'nombreTipo')">
+                                    El nombre tiene como mínimo 3 letras
+                                </div>
+                                <div class="invalid-feedback" *ngIf="controlHasErrorTipo('maxlength', 'nombreTipo')">
+                                    El nombre tiene como máximo 100 letras
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 float-right">
+                            <ng-container *ngIf="tipoProducto">
+                                <button type="submit" class="btn btn-primary btn-elevate" (click)="saveTipo()" [disabled]="formGroupTipo.invalid">
+                              Guardar
+                            </button>
+                            </ng-container>
+                        </div>
+                    </div>
+                </form>
+                <div class="container">
+                    <div class="table-responsive angular-bootstrap-table">
+                        <h4>Editar Tipos: </h4>
+                        <table class="table table-head-custom table-vertical-center overflow-hidden">
+                            <thead>
+                                <th>ID</th>
+                                <th>NOMBRE</th>
+                                <th>ACCIONES</th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let tipo of tiposInput">
+                                    <td>{{tipo.idTipoProducto}}</td>
+                                    <td>{{tipo.nombre}}</td>
+                                    <td>
+
+                                        <a title="Editar Tipo" class="btn btn-icon btn-light btn-hover-primary btn-sm mx-3" (click)="editTipo(tipo)" *ngIf="tipo.idTipoProducto > 0">
+                                            <span [inlineSVG]="'./assets/media/svg/icons/Communication/Write.svg'" cacheSVG="true" class="svg-icon svg-icon-md svg-icon-primary">
+                              </span>
+                                        </a>
+                                    </td>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="subtipoProducto">
+            <div class="card card-custom">
+                <form action="#" class="form form-label-right" [formGroup]="formGroupSubtipo">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h3 class="card-label">Crear Subtipo de Producto</h3>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <div class="col-lg-6">
+                                <label>Selecciona Tipo</label>
+                                <select class="form-control form-control-lg form-control-solid" name="idTipo" [class.is-invalid]="isControlInvalidSubtipo('idTipo')" [class.is-valid]="isControlValidSubtipo('idTipo')" formControlName="idTipo" (ngModelChange)="onChange($event)">
+                                    <option value="0">Ninguno</option>
+                                    <option *ngFor="let tipo of tiposInput" [ngValue]="tipo.idTipoProducto">{{tipo.nombre}}</option>
+                                </select>
+                                <div class="valid-feedback" *ngIf="isControlValidSubtipo('idTipo')">
+                                    Tipo válido
+                                </div>
+                                <div class="invalid-feedback" *ngIf="controlHasErrorSubtipo('required', 'idTipo')">
+                                    El Tipo es obligatorio
+                                </div>
+                                <div class="invalid-feedback" *ngIf="controlHasErrorSubtipo('pattern', 'idTipo')">
+                                    El Tipo no es válido
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <label class="form-label">Ingresa Nombre</label>
+                                <input type="text" class="form-control form-control-lg form-control-solid" name="nombreSubtipo" placeholder="Nombre Subtipo" autocomplete="off" [class.is-invalid]="isControlInvalidSubtipo('nombreSubtipo')" [class.is-valid]="isControlValidSubtipo('nombreSubtipo')"
+                                    formControlName="nombreSubtipo" />
+                                <div class="valid-feedback" *ngIf="isControlValidSubtipo('nombreSubtipo')">
+                                    Nombre válido
+                                </div>
+                                <div class="invalid-feedback" *ngIf="controlHasErrorSubtipo('required', 'nombreSubtipo')">
+                                    El nombre es obligatorio
+                                </div>
+                                <div class="invalid-feedback" *ngIf="controlHasErrorSubtipo('minlength', 'nombreSubtipo')">
+                                    El nombre tiene como mínimo 3 letras
+                                </div>
+                                <div class="invalid-feedback" *ngIf="controlHasErrorSubtipo('maxlength', 'nombreSubtipo')">
+                                    El nombre tiene como máximo 100 letras
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-lg-2 float-right">
+                            <ng-container *ngIf="tipoProducto">
+                                <button type="submit" class="btn btn-primary btn-elevate" (click)="saveSubtipo()" [disabled]="formGroupSubtipo.invalid">
+                              Guardar
+                            </button>
+                            </ng-container>
+                        </div>
+                    </div>
+                </form>
+                <div class="container">
+                    <div class="table-responsive angular-bootstrap-table">
+                        <h4>Editar Subtipos del Tipo: '{{subtipoNombre}}'</h4>
+                        <table class="table table-head-custom table-vertical-center overflow-hidden">
+                            <thead>
+                                <th>ID</th>
+                                <th>NOMBRE</th>
+                                <th>ACCIONES</th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let subtipo of subtipos">
+                                    <td>{{subtipo.idSubtipoProducto}}</td>
+                                    <td>{{subtipo.nombre}}</td>
+                                    <td>
+
+                                        <a title="Editar Tipo" class="btn btn-icon btn-light btn-hover-primary btn-sm mx-3" (click)="editSubtipo(subtipo)" *ngIf="subtipo.idSubtipoProducto > 0">
+                                            <span [inlineSVG]="'./assets/media/svg/icons/Communication/Write.svg'" cacheSVG="true" class="svg-icon svg-icon-md svg-icon-primary">
+                              </span>
+                                        </a>
+                                    </td>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-light btn-elevate mr-2" (click)="modal.dismiss()">
+        Cancelar
+      </button>
+    </div>
+</div>

@@ -1,0 +1,40 @@
+<div class="modal-header">
+    <div class="modal-title h4" *ngIf="estado">Deshabilitar los Productos Seleccionados</div>
+    <div class="modal-title h4" *ngIf="!estado">Habilitar los Productos Seleccionados</div>
+</div>
+<div class="modal-body overlay overlay-block cursor-default">
+    <ng-container *ngIf="isLoading">
+        <div class="overlay-layer">
+            <div class="spinner spinner-lg spinner-primary"></div>
+        </div>
+    </ng-container>
+
+    <div class="table-responsive angular-bootstrap-table">
+        <table class="table table-head-custom table-vertical-center overflow-hidden">
+            <thead>
+                <th>NOMBRE</th>
+                <th>PRECIO</th>
+                <th>ESTADO</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let producto of productos">
+                    <td>{{producto.nombre}}</td>
+                    <td>{{producto.precio}}</td>
+                    <td>
+                        <span class="label label-lg label-inline" [class.label-light-danger]="producto.activo === false" [class.label-light-success]="producto.activo === true">
+                <ng-container *ngIf="producto.activo === false">Deshabilitado</ng-container>
+                <ng-container *ngIf="producto.activo === true">Activo</ng-container>
+              </span>
+                    </td>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<div class="form modal-footer">
+    <div class="form-group">
+        <button type="button" class="btn btn-light btn-elevate mr-3" (click)="modal.dismiss()">Cancel</button>
+        <button type="button" class="btn btn-primary btn-elevate" (click)="actualizarEstadoProductos()">Actualizar Estado</button>
+    </div>
+</div>

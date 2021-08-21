@@ -1,0 +1,47 @@
+<ng-container *ngIf="isLoading">
+    <div class="progress progress-modal">
+        <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+</ng-container>
+
+<div class="modal-header">
+    <div class="modal-title h4">Editar Marca Producto: '{{marcaInput.nombre}}'</div>
+</div>
+<div class="modal-body">
+    <ng-container *ngIf="isLoading">
+        <span>Editando Marca Producto...</span>
+    </ng-container>
+
+    <ng-container *ngIf="!isLoading">
+        <form action="#" class="form form-label-right" [formGroup]="formGroup">
+            <div class="form-group row">
+                <div class="col-lg-6">
+                    <label class="form-label">Ingresa Nombre</label>
+                    <input type="text" class="form-control form-control-lg form-control-solid" name="nombre" placeholder="Nombre " autocomplete="off" [class.is-invalid]="isControlInvalid('nombre')" [class.is-valid]="isControlValid('nombre')" formControlName="nombre" />
+                    <div class="valid-feedback" *ngIf="isControlValid('nombre')">
+                        Nombre válido
+                    </div>
+                    <div class="invalid-feedback" *ngIf="controlHasError('required', 'nombre')">
+                        El nombre es obligatorio
+                    </div>
+                    <div class="invalid-feedback" *ngIf="controlHasError('minlength', 'nombre')">
+                        El nombre tiene como mínimo 3 letras
+                    </div>
+                    <div class="invalid-feedback" *ngIf="controlHasError('maxlength', 'nombre')">
+                        El nombre tiene como máximo 100 letras
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div>
+                    <button type="button" class="btn btn-light btn-elevate mr-1" (click)="modal.dismiss()">
+                    Cancelar
+                  </button>&nbsp;
+                    <button type="button" class="btn btn-primary btn-elevate" (click)="editarMarca()">
+                    Editar
+                  </button>
+                </div>
+            </div>
+        </form>
+    </ng-container>
+</div>

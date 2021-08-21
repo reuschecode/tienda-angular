@@ -1,0 +1,151 @@
+<div class="card card-custom gutter-b">
+    <div class="card-header">
+        <div class="card-title">
+            <h3 class="card-label">Lista de Productos</h3>
+        </div>
+        <div class="card-toolbar">
+            <button type="button" class="btn btn-primary" (click)="createTipoSubtipo()">Crear/Editar Tipo o Subtipo</button> &nbsp;
+            <button type="button" class="btn btn-primary" (click)="createMarca()">Crear/Editar Marca</button> &nbsp;
+            <button type="button" class="btn btn-primary" (click)="create()">Nuevo Producto</button>
+        </div>
+    </div>
+    <div class="card-body">
+        <!-- begin: Filtration form -->
+        <div class="form form-label-right">
+            <div class="form-group row">
+                <div class="col-lg-6">
+                    <div class="row" [formGroup]="filterGroup">
+                        <div class="col-lg-4">
+                            <select class="form-control" name="tipoProducto" placeholder="Filtrar por Tipo" formControlName="tipoProducto" (ngModelChange)="selectedOption($event)">
+                  <option value="">Todos</option>
+                  <option *ngFor="let tipoProducto of tiposProductosService.items$ | async" [ngValue]="tipoProducto">{{tipoProducto.nombre}}</option>
+                </select>
+                            <small class="form-text text-muted"><b>Filtrar</b> por Tipo</small>
+                        </div>
+                        <div class="col-lg-4">
+                            <select class="form-control" name="subtipoProducto" placeholder="Filtrar por Subtipo" formControlName="subtipoProducto">
+                  <option value="">Todos</option>
+                  <option *ngFor="let subtipoProducto of subtipoProducto">{{subtipoProducto.nombre}}</option>
+                </select><small class="form-text text-muted"><b>Filtrar</b> por Subtipo</small>
+                        </div>
+                        <div class="col-lg-4">
+                            <select class="form-control" name="marcaProducto" placeholder="Filtrar por Marca" name="marcaProducto" formControlName="marcaProducto">
+                  <option value="">Todos</option>
+                  <option *ngFor="let marcaProducto of marcasProductosService.items$ | async">{{marcaProducto.nombre}}</option>
+                </select><small class="form-text text-muted"><b>Filtrar</b> por Marca</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4" [formGroup]="searchGroup">
+                    <input type="text" class="form-control" name="searchText" placeholder="Search" value="" formControlName="searchTerm" /><small class="form-text text-muted"><b>Search</b> in all fields</small>
+                </div>
+            </div>
+        </div>
+        <!-- end: Filtration form -->
+
+        <!-- begin: Grouping -->
+        <ng-container *ngIf="getProductosSeleccionadosCount()">
+            <div class="form">
+                <div class="row align-items-center form-group-actions margin-top-20 margin-bottom-20">
+                    <div class="col-xl-12">
+                        <div class="form-group form-group-inline">
+                            <div class="form-label form-label-no-wrap">
+                                <label class="font-bold font-danger"><span>Productos seleccionados: 
+                      <b>{{ getProductosSeleccionadosCount() }}</b></span></label>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-danger font-weight-bolder font-size-sm mr-1" (click)="deshabilitarSeleccionados()">
+                    <i class="fa fa-trash"></i> Deshabilitar Productos
+                  </button>&nbsp;
+                                <button type="button" class="btn btn-light-primary font-weight-bolder font-size-sm mr-1" (click)="habilitarSeleccionados()">
+                    <i class="fa fa-sync-alt"></i> Habilitar Productos
+                  </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <!-- end: Grouping -->
+
+        <!-- begin:Table -->
+        <div class="table-responsive angular-bootstrap-table">
+            <table class="table table-head-custom table-vertical-center overflow-hidden">
+                <thead>
+                    <th class="selection-cell-header" data-row-selection="true">
+                        <label class="checkbox checkbox-single"><input type="checkbox" (click)="seleccionarTodos()"
+                  [checked]="grouping.checkAreAllRowsSelected()" /><span></span></label>
+                    </th>
+                    <th>
+                        ID
+                        <app-sort-icon column="id" [activeColumn]="sorting.column" [activeDirection]="sorting.direction" (sort)="sort($event)"></app-sort-icon>
+                    </th>
+                    <th>
+                        NOMBRE
+                        <app-sort-icon column="firstName" [activeColumn]="sorting.column" [activeDirection]="sorting.direction" (sort)="sort($event)"></app-sort-icon>
+                    </th>
+                    <th>
+                        PRECIO
+                        <app-sort-icon column="lastName" [activeColumn]="sorting.column" [activeDirection]="sorting.direction" (sort)="sort($event)"></app-sort-icon>
+                    </th>
+                    <th>
+                        ESTADO
+                        <app-sort-icon column="email" [activeColumn]="sorting.column" [activeDirection]="sorting.direction" (sort)="sort($event)"></app-sort-icon>
+                    </th>
+                    <th>
+                        TIPO
+                        <app-sort-icon column="gender" [activeColumn]="sorting.column" [activeDirection]="sorting.direction" (sort)="sort($event)"></app-sort-icon>
+                    </th>
+                    <th>
+                        SUBTIPO
+                        <app-sort-icon column="status" [activeColumn]="sorting.column" [activeDirection]="sorting.direction" (sort)="sort($event)"></app-sort-icon>
+                    </th>
+                    <th>
+                        MARCA
+                        <app-sort-icon column="type" [activeColumn]="sorting.column" [activeDirection]="sorting.direction" (sort)="sort($event)"></app-sort-icon>
+                    </th>
+                    <th>ACCIONES</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let producto of productoService.items$ | async">
+                        <td class="selection-cell">
+                            <label class="checkbox checkbox-single"><input type="checkbox" (click)="seleccionarProducto(producto)"
+                                [checked]="estaSeleccionado(producto)" />
+                            <span></span>
+                            </label>
+                        </td>
+                        <td>{{ producto.idProducto }}</td>
+                        <td>{{ producto.nombre }}</td>
+                        <td>{{ producto.precio }}</td>
+                        <td>
+                            <span class="label label-lg label-inline" [class.label-light-danger]="producto.activo === false" [class.label-light-success]="producto.activo === true">
+                                <ng-container *ngIf="producto.activo === true">Activo</ng-container>
+                                <ng-container *ngIf="producto.activo === false">Deshabilitado</ng-container>
+                            </span>
+                        </td>
+                        <td>{{ producto.subtipoProducto ? producto.subtipoProducto.tipoProducto.nombre : '' }}</td>
+                        <td>{{ producto.subtipoProducto ? producto.subtipoProducto.nombre : '' }}</td>
+                        <td>{{ producto.marcaProducto ? producto.marcaProducto.nombre : '' }}</td>
+
+                        <td>
+
+                            <a title="Editar Producto" class="btn btn-icon btn-light btn-hover-primary btn-sm mx-3" (click)="edit(producto)">
+                                <span [inlineSVG]="'./assets/media/svg/icons/Communication/Write.svg'" cacheSVG="true" class="svg-icon svg-icon-md svg-icon-primary">
+                  </span>
+                            </a>
+
+                            <a title="Deshabilitar Producto" class="btn btn-icon btn-light btn-hover-danger btn-sm" (click)="delete(producto)">
+                                <span [inlineSVG]="'./assets/media/svg/icons/General/Trash.svg'" cacheSVG="true" class="svg-icon svg-icon-md svg-icon-danger">
+                  </span>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+        <!-- end: Table -->
+        <app-paginator class="d-flex justify-content-between align-items-center flex-wrap" [paginator]="paginator" [isLoading]="isLoading" (paginate)="paginate($event)"></app-paginator>
+
+    </div>
+</div>
